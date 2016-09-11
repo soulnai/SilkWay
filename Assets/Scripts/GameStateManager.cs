@@ -102,7 +102,7 @@ public class GameStateManager : MonoBehaviour {
         CheckVictory();
         RevealNeighbours(player.GetComponent<Player>().CurrentPOI);
         LaunchEvent(targetPOI);
-        CheckVictory();
+        //CheckVictory();
     }
 
     public void RevealNeighbours(GameObject poi)

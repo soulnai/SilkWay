@@ -50,15 +50,9 @@ public class POI : MonoBehaviour {
     public void OnMouseDown()
     {
         Debug.Log(GM.gamestate);
-        if (GM.gamestate == GameStates.GlobalMap)
-        {
-            if (OnPOIClicked != null)
-            {
-                GM.MoveUnitToPOI(this);
-            }
-        }
+        OnPOIClicked(this);
     }
-
+    
 
     public void AddConnection(POI NodeTo)
     {

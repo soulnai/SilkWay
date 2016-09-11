@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
+# Visual Studio 2013
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilkWay.CSharp.Plugins", "SilkWay.CSharp.Plugins.csproj", "{C27AB3A0-8ABD-042D-4D81-BE54B9196116}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilkWay.CSharp", "SilkWay.CSharp.csproj", "{A2091D2F-5725-352E-C7DF-FD83B3937362}"
