@@ -12,7 +12,7 @@ public class Player : MonoBehaviour {
 
     public List<GameObject> visitedNodes = new List<GameObject>();
 
-    public List<string> companions = new List<string>();
+    public List<Companion> companions = new List<Companion>();
 
 	// Use this for initialization
 	void Start () {

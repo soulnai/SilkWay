@@ -6,6 +6,7 @@ using EnumSpace;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Linq;
 
 public class GameStateManager : MonoBehaviour {
 
@@ -17,7 +18,8 @@ public class GameStateManager : MonoBehaviour {
     public GameStates gamestate;
 
     public List<GameObject> tmpButtons;
-
+    public AudioSource play;
+    AudioClip EventSound;
     // Use this for initialization
     void Start () {
         MG = GameObject.Find("MapController").GetComponent<MapGenerator>();
@@ -25,6 +27,53 @@ public class GameStateManager : MonoBehaviour {
         EventWindow.SetActive(false);
         gamestate = GameStates.GlobalMap;
         EventsGenerate();
+        EventSound = Resources.Load("sounds/OGG/jingles_STEEL/jingles_STEEL00", typeof(AudioClip)) as AudioClip;
+
+
+    }
+
+    private void SetCompanions()
+    {
+        Companion trader = new Companion();
+        trader.CompanionName = "trader";
+        trader.eventReactions.Add(EnumSpace.EventType.Trade, 0.7f);
+        trader.eventReactions.Add(EnumSpace.EventType.Fight, 0.1f);
+        trader.eventReactions.Add(EnumSpace.EventType.Nothing, 0.1f);
+        trader.eventStringsSuccess.Add(EnumSpace.EventType.Nothing, "Trader accidentaly finds something usable.");
+        trader.eventStringsLoss.Add(EnumSpace.EventType.Nothing, "It's just a camel skull.");
+        trader.eventStringsSuccess.Add(EnumSpace.EventType.Trade, "Traders make a few steps from you and whispers something to each other. It's strange, but as result you get profit.");
+        trader.eventStringsLoss.Add(EnumSpace.EventType.Trade, "No trade. At all, only losts.");
+        trader.eventStringsSuccess.Add(EnumSpace.EventType.Fight, "First time of your life you see a Trader-berserker!!!");
+        trader.eventStringsLoss.Add(EnumSpace.EventType.Fight, "What are you excpect from a trader in a fight? ");
+
+        Companion dog = new Companion();
+        dog.CompanionName = "dog";
+        dog.eventReactions.Add(EnumSpace.EventType.Trade, 0.05f);
+        dog.eventReactions.Add(EnumSpace.EventType.Fight, 0.7f);
+        dog.eventReactions.Add(EnumSpace.EventType.Nothing, 0.1f);
+        dog.eventStringsSuccess.Add(EnumSpace.EventType.Nothing, "Dog accidentaly finds something usable.");
+        dog.eventStringsLoss.Add(EnumSpace.EventType.Nothing, "It's just a desert rat.");
+        dog.eventStringsSuccess.Add(EnumSpace.EventType.Trade, "Dog just charm a trader and you get a profit from a deal.");
+        dog.eventStringsLoss.Add(EnumSpace.EventType.Trade, "No trade. At all, only losts.");
+        dog.eventStringsSuccess.Add(EnumSpace.EventType.Fight, "Dog wins!");
+        dog.eventStringsLoss.Add(EnumSpace.EventType.Fight, "Dog lost a fight.");
+
+        Companion ranger = new Companion();
+        ranger.CompanionName = "ranger";
+        ranger.eventReactions.Add(EnumSpace.EventType.Trade, 0.1f);
+        ranger.eventReactions.Add(EnumSpace.EventType.Fight, 0.4f);
+        ranger.eventReactions.Add(EnumSpace.EventType.Nothing, 0.7f);
+        ranger.eventStringsSuccess.Add(EnumSpace.EventType.Nothing, "Ranger accidentaly finds something usable.");
+        ranger.eventStringsLoss.Add(EnumSpace.EventType.Nothing, "It's just a caravain remains.");
+        ranger.eventStringsSuccess.Add(EnumSpace.EventType.Trade, "Ranger told some coll stories to a trader. It makes profit!");
+        ranger.eventStringsLoss.Add(EnumSpace.EventType.Trade, "No trade. At all, only losts.");
+        ranger.eventStringsSuccess.Add(EnumSpace.EventType.Fight, "Ranger wins!");
+        ranger.eventStringsLoss.Add(EnumSpace.EventType.Fight, "Ranger lost a fight.");
+        
+        player.GetComponent<Player>().companions.Add(trader);
+        player.GetComponent<Player>().companions.Add(dog);
+        player.GetComponent<Player>().companions.Add(ranger);
+        
     }
 
     private void EventsGenerate()
@@ -35,11 +84,6 @@ public class GameStateManager : MonoBehaviour {
         Nothing.StartMessageWindowHeader = "Unepected findings Start";
         Nothing.EndMessageWindowHeader = "Unepected findings End";
         Nothing.StartMessageWindowText = "One of your companions find something. You should take a look.";
-        Nothing.EndMessageWindowTextSuccess = "You folow your {0} and he takes you to remains of old caravain. But still some valuables can be retrived from it.";
-        Nothing.EndMessageWindowTextFailure = "You folow your {0}. But it was only desert rat.";
-
-        Nothing.companions["dog"] = 0.1f;
-        Nothing.companions["ranger"] = 0.3f;
 
         AllEvents.Add(Nothing);
 
@@ -53,19 +97,18 @@ public class GameStateManager : MonoBehaviour {
 
         Trade.type = EnumSpace.EventType.Trade;
 
+        Trade.StartMessageWindowHeader = "Random event - Trade Start";
+        Trade.EndMessageWindowHeader = "Random event - Trade End";
+        Trade.StartMessageWindowText = "You meet another caravain. And have an opportunity to trade.";
+
         AllEvents.Add(Trade);
-        
+
         RandomEvent Fight = new RandomEvent();
 
         Fight.type = EnumSpace.EventType.Fight;
         Fight.StartMessageWindowHeader = "Random event - Fight Start";
         Fight.EndMessageWindowHeader = "Random event - Fight End";
         Fight.StartMessageWindowText = "Some local bandits came out of the corner. Prepare to fight.";
-        Fight.EndMessageWindowTextSuccess = "Your {0} esealy beat bandits. Now they run away.";
-        Fight.EndMessageWindowTextFailure = "Your {0} lost the fight. And you get some punches too.";
-
-        Fight.companions["dog"] = 0.4f;
-        Fight.companions["ranger"] = 0.2f;
 
         AllEvents.Add(Fight);
     }
@@ -78,6 +121,7 @@ public class GameStateManager : MonoBehaviour {
     public void SetPlayer(GameObject playertoset)
     {
         player = playertoset;
+        SetCompanions();
     }
 
     public void LaunchEvent(POI poi)
@@ -89,6 +133,7 @@ public class GameStateManager : MonoBehaviour {
             {
                 gamestate = GameStates.EventWindow;
                 ProcessEvent(poi);
+                PlaySound(EventSound);
                 EventWindow.SetActive(true);
             }
             else
@@ -101,7 +146,11 @@ public class GameStateManager : MonoBehaviour {
             gamestate = GameStates.GlobalMap;
         }
         Debug.Log(gamestate);
-        //TODO: create message window
+    }
+
+    public void PlaySound(AudioClip sound) 
+    {
+        play.PlayOneShot(sound);
     }
 
     private void CheckVictory()
@@ -131,7 +180,7 @@ public class GameStateManager : MonoBehaviour {
 
     public void MoveUnitToPOI(POI targetPOI)
     {
-        if (player.GetComponent<Player>().CurrentPOI.GetComponent<POI>().ConnectedNodes.Contains(targetPOI) /*&& !player.GetComponent<Player>().visitedNodes.Contains(targetPOI.gameObject)*/)
+        if (player.GetComponent<Player>().CurrentPOI.GetComponent<POI>().ConnectedNodes.Contains(targetPOI))
         {
             if (player.GetComponent<Player>().Resource >= targetPOI.GetComponent<POI>().PathCost)
             {
@@ -180,23 +229,9 @@ public class GameStateManager : MonoBehaviour {
                     Debug.Log("Random event - Nothing");
                     poi.RandomEvent = false;
 
-                        foreach (var item in poi.Events[0].companions.Keys)
-                        {
-                            if (player.GetComponent<Player>().companions.Contains(item))
-                            {
-                            GameObject Button = Instantiate(Resources.Load("prefab/Button"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-                            string tmpitem = item;
-                            GameObject tmpButton = Button;
-                            tmpButton.transform.SetParent(EventWindow.transform, false);
-                            tmpButton.GetComponent<Button>().onClick.AddListener(() => ProcessChoiseResult(poi.Events[0], tmpitem));
-                            tmpButton.GetComponentInChildren<Text>().text = tmpitem + " (Chance = " + (0.3f+ poi.Events[0].companions[tmpitem]) * 100 + "%)";
-                            tmpButtons.Add(tmpButton);
-                            tmpButton.SetActive(true);
-                            }
-                        }
-                    
+                    GenerateButtons(poi);
 
-                    if (player.GetComponent<Player>().companions.Contains("dog") || player.GetComponent<Player>().companions.Contains("ranger"))
+                    if (CompanionCheck(ev))
                     {
                         EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = poi.Events[0].StartMessageWindowHeader;
                         EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = poi.Events[0].StartMessageWindowText;
@@ -209,35 +244,47 @@ public class GameStateManager : MonoBehaviour {
                     }
                     break;
                 }
-                    
+
             case EnumSpace.EventType.Trade:
                 {
-                    int success = UnityEngine.Random.Range(0, 2);
-                    Debug.Log("Random event - Trade");
-                    Debug.Log("Trade result = " + success);
-                    if (success == 0)
+
+
+                    GenerateButtons(poi);
+
+                    if (CompanionCheck(ev))
                     {
-                        Debug.Log("Unfortunate trade");
-                        int loss = UnityEngine.Random.Range(1, 3);
-                        Debug.Log("You lost " + loss + " resources");
-                        player.GetComponent<Player>().Resource = player.GetComponent<Player>().Resource - loss;
-                        Debug.Log("Total resources =  " + player.GetComponent<Player>().Resource);
-                        poi.RandomEvent = false;
-                        EventWindow.GetComponent<MessageWindowController>().Button.SetActive(true);
-                        EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = "Unfortunate trade";
-                        EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = "You lost " + loss + " resources. And now you have " + player.GetComponent<Player>().Resource + " resources.";
+                        EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = poi.Events[0].StartMessageWindowHeader;
+                        EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = poi.Events[0].StartMessageWindowText;
                     }
-                    if (success == 1)
+                    else
                     {
-                        Debug.Log("Great trade");
-                        int gain = UnityEngine.Random.Range(1, 3);
-                        Debug.Log("You gain " + gain + " resources");
-                        player.GetComponent<Player>().Resource = player.GetComponent<Player>().Resource + gain;
-                        Debug.Log("Total resources =  " + player.GetComponent<Player>().Resource);
-                        poi.RandomEvent = false;
-                        EventWindow.GetComponent<MessageWindowController>().Button.SetActive(true);
-                        EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = "Great trade";
-                        EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = "You gain " + gain + " resources. And now you have " + player.GetComponent<Player>().Resource + " resources.";
+                        int success = UnityEngine.Random.Range(0, 2);
+                        Debug.Log("Random event - Trade");
+                        Debug.Log("Trade result = " + success);
+                        if (success == 0)
+                        {
+                            Debug.Log("Unfortunate trade");
+                            int loss = UnityEngine.Random.Range(1, 3);
+                            Debug.Log("You lost " + loss + " resources");
+                            player.GetComponent<Player>().Resource = player.GetComponent<Player>().Resource - loss;
+                            Debug.Log("Total resources =  " + player.GetComponent<Player>().Resource);
+                            poi.RandomEvent = false;
+                            EventWindow.GetComponent<MessageWindowController>().Button.SetActive(true);
+                            EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = "Unfortunate trade";
+                            EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = "You lost " + loss + " resources. And now you have " + player.GetComponent<Player>().Resource + " resources.";
+                        }
+                        if (success == 1)
+                        {
+                            Debug.Log("Great trade");
+                            int gain = UnityEngine.Random.Range(1, 3);
+                            Debug.Log("You gain " + gain + " resources");
+                            player.GetComponent<Player>().Resource = player.GetComponent<Player>().Resource + gain;
+                            Debug.Log("Total resources =  " + player.GetComponent<Player>().Resource);
+                            poi.RandomEvent = false;
+                            EventWindow.GetComponent<MessageWindowController>().Button.SetActive(true);
+                            EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = "Great trade";
+                            EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = "You gain " + gain + " resources. And now you have " + player.GetComponent<Player>().Resource + " resources.";
+                        }
                     }
                     break;
                 }
@@ -245,23 +292,10 @@ public class GameStateManager : MonoBehaviour {
                 {
                     poi.RandomEvent = false;
 
-                    foreach (var item in poi.Events[0].companions.Keys)
-                    {
-                        if (player.GetComponent<Player>().companions.Contains(item))
-                        {
-                            GameObject Button = Instantiate(Resources.Load("prefab/Button"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-                            string tmpitem = item;
-                            GameObject tmpButton = Button;
-                            tmpButton.transform.SetParent(EventWindow.transform, false);
-                            tmpButton.GetComponent<Button>().onClick.AddListener(() => ProcessChoiseResult(poi.Events[0], tmpitem));
-                            tmpButton.GetComponentInChildren<Text>().text = tmpitem + " (Chance = " + (0.3f + poi.Events[0].companions[tmpitem]) * 100 + "%)";
-                            tmpButtons.Add(tmpButton);
-                            tmpButton.SetActive(true);
-                        }
-                    }
+                    GenerateButtons(poi);
 
 
-                    if (player.GetComponent<Player>().companions.Contains("dog") || player.GetComponent<Player>().companions.Contains("ranger"))
+                    if (CompanionCheck(ev))
                     {
                         EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = poi.Events[0].StartMessageWindowHeader;
                         EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = poi.Events[0].StartMessageWindowText;
@@ -314,20 +348,63 @@ public class GameStateManager : MonoBehaviour {
         }
     }
 
-    private void ProcessChoiseResult(RandomEvent Event, string companion)
+    private void GenerateButtons(POI poi)
     {
-        float baseChance = 0.3f;
-        float result_chance = baseChance + Event.companions[companion];
+        
+        foreach (var item in player.GetComponent<Player>().companions)
+            {
+                GameObject Button = Instantiate(Resources.Load("prefab/Button"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+                Companion tmpitem = item;
+                GameObject tmpButton = Button;
+                tmpButton.transform.SetParent(EventWindow.transform, false);
+                tmpButton.GetComponent<Button>().onClick.AddListener(() => ProcessChoiseResult(poi.Events[0], tmpitem));
+                tmpButton.GetComponentInChildren<Text>().text = tmpitem.CompanionName + " (Chance = " + (0.3f + tmpitem.eventReactions[poi.Events[0].type]) * 100 + "%)";
+                tmpButtons.Add(tmpButton);
+                tmpButton.SetActive(true);
+            }
+//        }
+    }
+
+    private bool CompanionCheck(EnumSpace.EventType ev)
+    {
+        if (player.GetComponent<Player>().companions.Count > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+        /*
+        switch (ev)
+        {
+            case EnumSpace.EventType.Nothing:
+                {
+                    if (player.GetComponent<Player>().companions.Contains("dog") || player.GetComponent<Player>().companions.Contains("ranger"))
+                        return true;
+                    break;
+                }
+            case EnumSpace.EventType.Fight:
+                {
+                    if (player.GetComponent<Player>().companions.Contains("dog") || player.GetComponent<Player>().companions.Contains("ranger"))
+                        return true;
+                    break;
+                }
+        }*/
+
+    }
+
+    private void ProcessChoiseResult(RandomEvent Event, Companion companion)
+    {
+        float baseChance = 0.2f;
+        float result_chance = baseChance + companion.eventReactions[Event.type];
         float rnd = UnityEngine.Random.value;
         if (rnd < result_chance)
         {
             Debug.Log(rnd);
-            Debug.Log(companion);
-            Debug.Log("Unexpected findings");
+            Debug.Log(companion.CompanionName);
             int gain = UnityEngine.Random.Range(1, 3);
-            Debug.Log("You gain " + gain + " resources");
             player.GetComponent<Player>().Resource = player.GetComponent<Player>().Resource + gain;
-            Debug.Log("Total resources =  " + player.GetComponent<Player>().Resource);
             EventWindow.GetComponent<MessageWindowController>().Button.SetActive(true);
             foreach (GameObject b in tmpButtons)
             {
@@ -336,11 +413,10 @@ public class GameStateManager : MonoBehaviour {
             }
             tmpButtons.Clear();
             EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = Event.EndMessageWindowHeader;
-            EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = String.Format(Event.EndMessageWindowTextSuccess, companion) + " And now you have " + player.GetComponent<Player>().Resource + " resources.";
+            EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = companion.eventStringsSuccess[Event.type] + " And now you have " + player.GetComponent<Player>().Resource + " resources.";
         }
         else
         {
-            Debug.Log("Unexpected findings");
             EventWindow.GetComponent<MessageWindowController>().Button.SetActive(true);
             foreach (GameObject b in tmpButtons)
             {
@@ -349,7 +425,7 @@ public class GameStateManager : MonoBehaviour {
             }
             tmpButtons.Clear();
             EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = Event.EndMessageWindowHeader;
-            EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = String.Format(Event.EndMessageWindowTextFailure, companion) + " And now you have " + player.GetComponent<Player>().Resource + " resources.";
+            EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = companion.eventStringsLoss[Event.type] + " And now you have " + player.GetComponent<Player>().Resource + " resources.";
         }
         EventWindow.SetActive(true);
         foreach (GameObject b in tmpButtons)
@@ -360,8 +436,4 @@ public class GameStateManager : MonoBehaviour {
         tmpButtons.Clear();
     }
 
-    private void PrepareWindow(EnumSpace.EventType typeEvent)
-    {
-        throw new NotImplementedException();
-    }
 }

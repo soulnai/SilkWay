@@ -82,7 +82,7 @@ public class MapGenerator : MonoBehaviour {
         endPOI.GetComponent<POI>().ID = id;
         endPOI.transform.position = new Vector3(newx, 0, 0);
         AllPoi.Add(endPOI);
-
+        endPOI.SetActive(false);
         AllPoi.Last().GetComponent<POI>().Victory = true;
 
         foreach (GameObject p in All[0])
@@ -117,7 +117,7 @@ public class MapGenerator : MonoBehaviour {
             for (int counts = 0; counts < 3; counts++)
             {
                 int remove = Random.Range(0, 2);
-                if (remove == 1 && point.GetComponent<POI>().ConnectedNodes.Count > 2 && point != startPOI && point != endPOI && !startPOI.GetComponent<POI>().ConnectedNodes.Contains(point.GetComponent<POI>()))
+                if (remove == 1 && point.GetComponent<POI>().ConnectedNodes.Count >= 3 && point != startPOI && point != endPOI && !startPOI.GetComponent<POI>().ConnectedNodes.Contains(point.GetComponent<POI>()))
                 {
                     POI randomnode = point.GetComponent<POI>().ConnectedNodes[Random.Range(0, point.GetComponent<POI>().ConnectedNodes.Count)];
                     point.GetComponent<POI>().ConnectedNodes.Remove(randomnode);

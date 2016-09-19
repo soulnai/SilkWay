@@ -58,26 +58,32 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
-    </Reference>
-    <Reference Include="Pathfinding.Poly2Tri">
-      <HintPath>Assets\AstarPathfindingProject\Plugins\Poly2Tri\Pathfinding.Poly2Tri.dll</HintPath>
     </Reference>
     <Reference Include="Pathfinding.ClipperLib">
       <HintPath>Assets\AstarPathfindingProject\Plugins\Clipper\Pathfinding.ClipperLib.dll</HintPath>
     </Reference>
+    <Reference Include="Pathfinding.Ionic.Zip.Reduced">
+      <HintPath>Assets\AstarPathfindingProject\Plugins\DotNetZip\Pathfinding.Ionic.Zip.Reduced.dll</HintPath>
+    </Reference>
     <Reference Include="Pathfinding.JsonFx">
       <HintPath>Assets\AstarPathfindingProject\Plugins\JsonFx\Pathfinding.JsonFx.dll</HintPath>
     </Reference>
-    <Reference Include="Pathfinding.Ionic.Zip.Reduced">
-      <HintPath>Assets\AstarPathfindingProject\Plugins\DotNetZip\Pathfinding.Ionic.Zip.Reduced.dll</HintPath>
+    <Reference Include="Pathfinding.Poly2Tri">
+      <HintPath>Assets\AstarPathfindingProject\Plugins\Poly2Tri\Pathfinding.Poly2Tri.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween">
+      <HintPath>Assets\DOTween\DOTween.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween43">
+      <HintPath>Assets\DOTween\DOTween43.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween46">
+      <HintPath>Assets\DOTween\DOTween46.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween50">
+      <HintPath>Assets\DOTween\DOTween50.dll</HintPath>
     </Reference>
     <Reference Include="Vectrosity">
       <HintPath>Assets\Plugins\Vectrosity.dll</HintPath>
@@ -208,8 +214,66 @@
     <Compile Include="Assets\AstarPathfindingProject\Utilities\ProfileHelper.cs" />
     <Compile Include="Assets\AstarPathfindingProject\Utilities\UnityReferenceHelper.cs" />
     <Compile Include="Assets\AstarPathfindingProject\changelog.cs" />
+    <Compile Include="Assets\Scripts\Companion.cs" />
+    <Compile Include="Assets\Scripts\EnumSpace.cs" />
+    <Compile Include="Assets\Scripts\GameStateManager.cs" />
     <Compile Include="Assets\Scripts\MapGenerator.cs" />
+    <Compile Include="Assets\Scripts\MessageWindowController.cs" />
     <Compile Include="Assets\Scripts\POI.cs" />
+    <Compile Include="Assets\Scripts\Player.cs" />
+    <Compile Include="Assets\Scripts\RandomEvent.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\Benchmark01.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\Benchmark01_UGUI.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\Benchmark02.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\Benchmark03.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\Benchmark04.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\CameraController.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\FloatingText.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\ObjectSpin.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\ShaderPropAnimator.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\SimpleScript.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TMP_ExampleScript_01.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TMP_FrameRateCounter.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TMP_TextInfoDebugTool.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TMP_TextSelector.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TMP_UiFrameRateCounter.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TMPro_InstructionOverlay.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TeleType.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TextConsoleSimulator.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TextMeshProFloatingText.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples\Scripts\TextMeshSpawner.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\FastAction.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\InlineGraphic.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\InlineGraphicManager.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\MaterialManager.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\MaterialReferenceManager.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMP_Asset.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMP_Compatibility.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMP_FontAsset.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMP_Settings.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMP_Sprite.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMP_SpriteAsset.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMP_Style.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMP_StyleSheet.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMP_SubMesh.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMP_SubMeshUI.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMP_Text.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMP_TextElement.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMP_TextInfo.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMP_TextUtilities.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMP_UpdateManager.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMP_UpdateRegistery.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMP_XmlTagStack.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMPro_EventManager.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMPro_ExtensionMethods.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMPro_FontUtilities.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMPro_MeshUtilities.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMPro_Private.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMPro_ShaderUtilities.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TMPro_UGUI_Private.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TextContainer.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TextMeshPro.cs" />
+    <Compile Include="Assets\TextMesh Pro\Scripts\TextMeshProUGUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AstarPathfindingProject\Editor\EditorAssets\Materials\Navmesh2.shader" />
@@ -227,10 +291,13 @@
     <None Include="Assets\AstarPathfindingProject\Readme.txt" />
     <None Include="Assets\AstarPathfindingProject\Readme_upgrading.txt" />
     <None Include="Assets\AstarPathfindingProject\link.xml" />
+    <None Include="Assets\DOTween\DOTween.XML" />
+    <None Include="Assets\DOTween\DOTween43.xml" />
+    <None Include="Assets\DOTween\DOTween46.xml" />
+    <None Include="Assets\DOTween\DOTween50.xml" />
+    <None Include="Assets\DOTween\Editor\DOTweenEditor.XML" />
+    <None Include="Assets\DOTween\readme.txt" />
     <None Include="Assets\Standard Assets\Cameras\CameraGuidelines.txt" />
-    <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />
-    <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
-    <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
     <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlendModesOverlay.shader" />
@@ -309,22 +376,21 @@
     <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonBasicOutline.shader" />
     <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonLit.shader" />
     <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonLitOutline.shader" />
-    <None Include="Assets\Standard Assets\Environment\Water (Basic)\Shaders\FXWaterBasic.shader" />
-    <None Include="Assets\Standard Assets\Environment\Water\Water\Shaders\FXWaterPro.shader" />
-    <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Advanced.shader" />
-    <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Simple.shader" />
-    <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\WaterInclude.cginc" />
     <None Include="Assets\Standard Assets\Fonts\OpenSans\License!.txt" />
-    <None Include="Assets\Standard Assets\ParticleSystems\ParticleSystemsGuidelines.txt" />
-    <None Include="Assets\Standard Assets\ParticleSystems\Shaders\PriorityParticleAdd.shader" />
-    <None Include="Assets\Standard Assets\ParticleSystems\Shaders\PriorityParticleAddSoft.shader" />
-    <None Include="Assets\Standard Assets\ParticleSystems\Shaders\PriorityParticleAlpha.shader" />
-    <None Include="Assets\Standard Assets\Prototyping\Shaders\WorldCoordDiffuse.shader" />
-    <None Include="Assets\Standard Assets\Vehicles\Aircraft\AircraftGuidelines.txt" />
-    <None Include="Assets\Standard Assets\Vehicles\Car\CarGuidelines.txt" />
-    <None Include="Assets\Standard Assets\Vehicles\Car\Shaders\DiffuseReflectiveShader.shader" />
-    <None Include="Assets\Standard Assets\Vehicles\Car\Shaders\ReflectiveDiffuseSpec.shader" />
-    <None Include="Assets\Standard Assets\Vehicles\Car\Shaders\ReflectiveDiffuseSpecTransp.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Bitmap-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Bitmap.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_SDF Overlay.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_SDF-Mobile Overlay.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_SDF-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_SDF-Surface.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_SDF.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\Vectrosity\Vectrosity 3 Documentation\Vectrosity Upgrade Guide.txt" />
     <None Include="Assets\Vectrosity\Vectrosity 3 Documentation\Vectrosity changelog.txt" />
     <None Include="Assets\Vectrosity\Vectrosity 4\Vectrosity 4 Upgrade Guide.txt" />
