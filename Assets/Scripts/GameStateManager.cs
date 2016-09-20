@@ -27,7 +27,7 @@ public class GameStateManager : MonoBehaviour {
         EventWindow.SetActive(false);
         gamestate = GameStates.GlobalMap;
         EventsGenerate();
-        EventSound = Resources.Load("sounds/OGG/jingles_STEEL/jingles_STEEL00", typeof(AudioClip)) as AudioClip;
+        EventSound = Resources.Load("sounds/OGG/Accept", typeof(AudioClip)) as AudioClip;
 
 
     }
@@ -92,6 +92,12 @@ public class GameStateManager : MonoBehaviour {
         Luck.type = EnumSpace.EventType.Luck;
 
         AllEvents.Add(Luck);
+
+        RandomEvent Misfortune = new RandomEvent();
+
+        Misfortune.type = EnumSpace.EventType.Misfortune;
+
+        AllEvents.Add(Misfortune);
 
         RandomEvent Trade = new RandomEvent();
 
@@ -222,6 +228,7 @@ public class GameStateManager : MonoBehaviour {
     public void ProcessEvent(POI poi)
     {
         EnumSpace.EventType ev = poi.Events[0].type;
+        poi.RandomEvent = false;
         switch (ev)
         {
             case EnumSpace.EventType.Nothing:
@@ -345,6 +352,19 @@ public class GameStateManager : MonoBehaviour {
                     EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = "Even this deserts can provide something useful. Gained " + gain + " resources. And now you have " + player.GetComponent<Player>().Resource + " resources.";
                     break;
                 }
+            case EnumSpace.EventType.Misfortune:
+                {
+                    Debug.Log("Random event - Misfortune");
+                    int lost = UnityEngine.Random.Range(1, 3);
+                    Debug.Log("You lost " + lost + " resources");
+                    player.GetComponent<Player>().Resource = player.GetComponent<Player>().Resource - lost;
+                    Debug.Log("Total resources =  " + player.GetComponent<Player>().Resource);
+                    poi.RandomEvent = false;
+                    EventWindow.GetComponent<MessageWindowController>().Button.SetActive(true);
+                    EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = "Misfortune!";
+                    EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = "This unwelcome land hides a lot of dangers. You lost " + lost + " resources. And now you have " + player.GetComponent<Player>().Resource + " resources.";
+                    break;
+                }
         }
     }
 
@@ -358,7 +378,7 @@ public class GameStateManager : MonoBehaviour {
                 GameObject tmpButton = Button;
                 tmpButton.transform.SetParent(EventWindow.transform, false);
                 tmpButton.GetComponent<Button>().onClick.AddListener(() => ProcessChoiseResult(poi.Events[0], tmpitem));
-                tmpButton.GetComponentInChildren<Text>().text = tmpitem.CompanionName + " (Chance = " + (0.3f + tmpitem.eventReactions[poi.Events[0].type]) * 100 + "%)";
+                tmpButton.GetComponentInChildren<Text>().text = tmpitem.CompanionName + " (Chance = " + (0.2f + tmpitem.eventReactions[poi.Events[0].type]) * 100 + "%)";
                 tmpButtons.Add(tmpButton);
                 tmpButton.SetActive(true);
             }
@@ -417,6 +437,8 @@ public class GameStateManager : MonoBehaviour {
         }
         else
         {
+            Debug.Log(rnd);
+            Debug.Log(companion.CompanionName);
             EventWindow.GetComponent<MessageWindowController>().Button.SetActive(true);
             foreach (GameObject b in tmpButtons)
             {

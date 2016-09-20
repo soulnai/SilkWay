@@ -214,6 +214,8 @@
     <None Include="Assets\DOTween\DOTween50.xml" />
     <None Include="Assets\DOTween\Editor\DOTweenEditor.XML" />
     <None Include="Assets\DOTween\readme.txt" />
+    <None Include="Assets\Resources\Prefab\land\License.txt" />
+    <None Include="Assets\Resources\Prefab\land\Tools\Three.js (Blender)\readme.txt" />
     <None Include="Assets\Standard Assets\Cameras\CameraGuidelines.txt" />
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
     <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />

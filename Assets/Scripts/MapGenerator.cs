@@ -114,7 +114,7 @@ public class MapGenerator : MonoBehaviour {
 
         foreach (GameObject point in AllPoi)
         {
-            for (int counts = 0; counts < 3; counts++)
+            for (int counts = 0; counts < 2; counts++)
             {
                 int remove = Random.Range(0, 2);
                 if (remove == 1 && point.GetComponent<POI>().ConnectedNodes.Count >= 3 && point != startPOI && point != endPOI && !startPOI.GetComponent<POI>().ConnectedNodes.Contains(point.GetComponent<POI>()))
@@ -187,6 +187,7 @@ public class MapGenerator : MonoBehaviour {
 
     public void DrawConnections(POI start, POI end)
     {
+        VectorLine.canvas.sortingOrder = -1;
         List<Vector3> Line = new List<Vector3>();
         Line.Add(new Vector3(start.gameObject.transform.position.x, start.gameObject.transform.position.y, start.gameObject.transform.position.z));
         Line.Add(new Vector3(end.gameObject.transform.position.x, end.gameObject.transform.position.y, end.gameObject.transform.position.z));
@@ -194,6 +195,8 @@ public class MapGenerator : MonoBehaviour {
         VectorLine myLine = new VectorLine("Line", Line, lineMat, 2);
 
         myLine.Draw();
+
+        //GenerateLandscape(start, end, 0.5f);
     }
 
     public void GenerateEvents(POI poi)
@@ -201,5 +204,16 @@ public class MapGenerator : MonoBehaviour {
         int rnd = Random.Range(0, GM.AllEvents.Count);
         poi.Events.Add(GM.AllEvents[rnd]);
         //Debug.Log((EnumSpace.EventType)rnd);
+    }
+
+    public void GenerateLandscape(POI start, POI end, float dist)
+    {
+        Vector3 dir = end.transform.position - start.transform.position;
+        float distance = Vector3.Distance(start.transform.position, end.transform.position);
+        Vector3 Point = Vector3.Normalize(start.transform.position + dir * (distance * dist));
+
+        //Vector3 Point = dist * Vector3.Normalize(end.transform.position - start.transform.position) + start.transform.position;
+        GameObject obstacle = Instantiate(Resources.Load("prefab/land/Models/naturePack_028"), Point, Quaternion.identity) as GameObject;
+        obstacle.transform.localScale.Set(0.3f,0.3f,0.3f) ;
     }
 }
