@@ -25,6 +25,8 @@ public class POI : MonoBehaviour {
 
     public bool Victory = false;
 
+    public bool revealed = false;
+
     public List<RandomEvent> Events = new List<RandomEvent>();
 
     // Use this for initialization

@@ -241,6 +241,8 @@ public class GameStateManager : MonoBehaviour {
 
     public void RevealNeighbours(GameObject poi)
     {
+        poi.GetComponent<POI>().revealed = true;
+
         foreach (POI point in poi.GetComponent<POI>().ConnectedNodes)
         {
             MG.DrawConnections(poi.GetComponent<POI>(), point);
