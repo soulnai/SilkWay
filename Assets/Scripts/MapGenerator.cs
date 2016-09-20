@@ -59,10 +59,10 @@ public class MapGenerator : MonoBehaviour {
                 smallList.Add(poi);
                 if (i != 0)
                     poi.gameObject.SetActive(false);
-                z += 2.5f;
+                z += 1.5f;
             }
             All.Add(smallList);
-            x += 1.5f;
+            x += 1f;
         }
 
         float largestX = AllPoi.Last().gameObject.transform.position.x;
@@ -179,15 +179,14 @@ public class MapGenerator : MonoBehaviour {
 
     private static GameObject PlacePoi(float x, float z, float randX, GameObject start)
     {
-        Vector3 location = new Vector3(x, z, randX) + new Vector3(x+Random.Range(-2f, 2f), 0, Random.Range(-2f, 2f));
-        Collider[] hitColliders = Physics.OverlapSphere(location, 0.5f);
+        Vector3 location = new Vector3(x+Random.Range(0f, 3f), 0, z+Random.Range(-1f, 3f));
+        Collider[] hitColliders = Physics.OverlapSphere(location, 2f);
         Debug.Log(hitColliders.Length);
-        return Instantiate(Resources.Load("prefab/Cube"), location, Quaternion.identity) as GameObject;
-        /*
-        if (hitColliders.Length <= 1 && Physics.OverlapSphere(start.transform.position, 0.5f).Length == 0)
+        //return Instantiate(Resources.Load("prefab/Cube"), location, Quaternion.identity) as GameObject;
+        if (hitColliders.Length == 0)
             return Instantiate(Resources.Load("prefab/Cube"), location, Quaternion.identity) as GameObject;
         else
-            return PlacePoi(location.x, location.z, randX, start);*/
+            return PlacePoi(x, z, randX, start);
     }
 
     public void ConnectPOIs(POI start, POI end)
