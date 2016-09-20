@@ -1,1 +1,41 @@
-﻿[{"type":"Nothing","StartMessageWindowHeader":"Unepected findings Start","StartMessageWindowText":"One of your companions find something. You should take a look.","EndMessageWindowHeader":"Unepected findings End","EndMessageWindowTextSuccess":null,"EndMessageWindowTextFailure":null,"companions":{}},{"type":"Luck","StartMessageWindowHeader":null,"StartMessageWindowText":null,"EndMessageWindowHeader":null,"EndMessageWindowTextSuccess":null,"EndMessageWindowTextFailure":null,"companions":{}},{"type":"Misfortune","StartMessageWindowHeader":null,"StartMessageWindowText":null,"EndMessageWindowHeader":null,"EndMessageWindowTextSuccess":null,"EndMessageWindowTextFailure":null,"companions":{}},{"type":"Trade","StartMessageWindowHeader":"Random event - Trade Start","StartMessageWindowText":"You meet another caravain. And have an opportunity to trade.","EndMessageWindowHeader":"Random event - Trade End","EndMessageWindowTextSuccess":null,"EndMessageWindowTextFailure":null,"companions":{}},{"type":"Fight","StartMessageWindowHeader":"Random event - Fight Start","StartMessageWindowText":"Some local bandits came out of the corner. Prepare to fight.","EndMessageWindowHeader":"Random event - Fight End","EndMessageWindowTextSuccess":null,"EndMessageWindowTextFailure":null,"companions":{}}]
+﻿[{
+	"type": "Nothing",
+	"StartMessageWindowHeader": "Unepected findings Start",
+	"StartMessageWindowText": "One of your companions find something. You should take a look.",
+	"EndMessageWindowHeader": "Unepected findings End",
+	"EndMessageWindowTextSuccess": null,
+	"EndMessageWindowTextFailure": null,
+	"companions": {}
+}, {
+	"type": "Luck",
+	"StartMessageWindowHeader": null,
+	"StartMessageWindowText": null,
+	"EndMessageWindowHeader": null,
+	"EndMessageWindowTextSuccess": null,
+	"EndMessageWindowTextFailure": null,
+	"companions": {}
+}, {
+	"type": "Misfortune",
+	"StartMessageWindowHeader": null,
+	"StartMessageWindowText": null,
+	"EndMessageWindowHeader": null,
+	"EndMessageWindowTextSuccess": null,
+	"EndMessageWindowTextFailure": null,
+	"companions": {}
+}, {
+	"type": "Trade",
+	"StartMessageWindowHeader": "Random event - Trade Start",
+	"StartMessageWindowText": "You meet another caravain. And have an opportunity to trade.",
+	"EndMessageWindowHeader": "Random event - Trade End",
+	"EndMessageWindowTextSuccess": null,
+	"EndMessageWindowTextFailure": null,
+	"companions": {}
+}, {
+	"type": "Fight",
+	"StartMessageWindowHeader": "Random event - Fight Start",
+	"StartMessageWindowText": "Some local bandits came out of the corner. Prepare to fight.",
+	"EndMessageWindowHeader": "Random event - Fight End",
+	"EndMessageWindowTextSuccess": null,
+	"EndMessageWindowTextFailure": null,
+	"companions": {}
+}]

@@ -84,7 +84,7 @@ public class GameStateManager : MonoBehaviour {
         Debug.Log(js);
         SaveLoad.Save(js, "Resources/Player/Player.json");
         */
-        Player tmp = Serialization.Deserialize(typeof(Player), SaveLoad.Load("Resources/Player/Player.json")) as Player;
+        Player tmp = Serialization.Deserialize(typeof(Player), SaveLoad.Load("Player/Player.json")) as Player;
 
         player.GetComponent<Player>().companions = tmp.companions;
     }
@@ -137,7 +137,7 @@ public class GameStateManager : MonoBehaviour {
         Debug.Log(js);
         SaveLoad.Save(js, "Resources/Events/Events.json");
 */
-        string loadjs = SaveLoad.Load("Resources/Events/Events.json");
+        string loadjs = SaveLoad.Load("Events/Events.json");
         Debug.Log(loadjs);
         AllEvents = Serialization.Deserialize(typeof(List<RandomEvent>), loadjs) as List<RandomEvent>;
 

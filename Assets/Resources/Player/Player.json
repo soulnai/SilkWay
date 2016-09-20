@@ -1,1 +1,57 @@
-﻿{"CurrentPOI":{},"Resource":6,"visitedNodes":[],"companions":[{"CompanionName":"trader","eventReactions":{"Trade":0.7,"Fight":0.1,"Nothing":0.1},"eventStringsSuccess":{"Nothing":"Trader accidentaly finds something usable.","Trade":"Traders make a few steps from you and whispers something to each other. It's strange, but as result you get profit.","Fight":"First time of your life you see a Trader-berserker!!!"},"eventStringsLoss":{"Nothing":"It's just a camel skull.","Trade":"No trade. At all, only losts.","Fight":"What are you excpect from a trader in a fight? "}},{"CompanionName":"dog","eventReactions":{"Trade":0.05,"Fight":0.7,"Nothing":0.1},"eventStringsSuccess":{"Nothing":"Dog accidentaly finds something usable.","Trade":"Dog just charm a trader and you get a profit from a deal.","Fight":"Dog wins!"},"eventStringsLoss":{"Nothing":"It's just a desert rat.","Trade":"No trade. At all, only losts.","Fight":"Dog lost a fight."}},{"CompanionName":"ranger","eventReactions":{"Trade":0.1,"Fight":0.4,"Nothing":0.7},"eventStringsSuccess":{"Nothing":"Ranger accidentaly finds something usable.","Trade":"Ranger told some coll stories to a trader. It makes profit!","Fight":"Ranger wins!"},"eventStringsLoss":{"Nothing":"It's just a caravain remains.","Trade":"No trade. At all, only losts.","Fight":"Ranger lost a fight."}}]}
+﻿{
+	"CurrentPOI": {},
+	"Resource": 6,
+	"visitedNodes": [],
+	"companions": [{
+		"CompanionName": "trader",
+		"eventReactions": {
+			"Trade": 0.7,
+			"Fight": 0.1,
+			"Nothing": 0.1
+		},
+		"eventStringsSuccess": {
+			"Nothing": "Trader accidentaly finds something usable.",
+			"Trade": "Traders make a few steps from you and whispers something to each other. It's strange, but as result you get profit.",
+			"Fight": "First time of your life you see a Trader-berserker!!!"
+		},
+		"eventStringsLoss": {
+			"Nothing": "It's just a camel skull.",
+			"Trade": "No trade. At all, only losts.",
+			"Fight": "What are you excpect from a trader in a fight? "
+		}
+	}, {
+		"CompanionName": "dog",
+		"eventReactions": {
+			"Trade": 0.05,
+			"Fight": 0.7,
+			"Nothing": 0.1
+		},
+		"eventStringsSuccess": {
+			"Nothing": "Dog accidentaly finds something usable.",
+			"Trade": "Dog just charm a trader and you get a profit from a deal.",
+			"Fight": "Dog wins!"
+		},
+		"eventStringsLoss": {
+			"Nothing": "It's just a desert rat.",
+			"Trade": "No trade. At all, only losts.",
+			"Fight": "Dog lost a fight."
+		}
+	}, {
+		"CompanionName": "ranger",
+		"eventReactions": {
+			"Trade": 0.1,
+			"Fight": 0.4,
+			"Nothing": 0.7
+		},
+		"eventStringsSuccess": {
+			"Nothing": "Ranger accidentaly finds something usable.",
+			"Trade": "Ranger told some coll stories to a trader. It makes profit!",
+			"Fight": "Ranger wins!"
+		},
+		"eventStringsLoss": {
+			"Nothing": "It's just a caravain remains.",
+			"Trade": "No trade. At all, only losts.",
+			"Fight": "Ranger lost a fight."
+		}
+	}]
+}

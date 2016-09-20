@@ -17,11 +17,17 @@ public class SaveLoad {
 
     public static string Load(string path)
     {
+        /*
         var encoding = Encoding.GetEncoding("UTF-8");
 
         using (StreamReader stream = new StreamReader(Path.Combine(Application.dataPath, path), encoding, false))
         {
             return stream.ReadToEnd();
-        }
+        }*/
+        string filePath = path.Replace(".json", "");
+
+        TextAsset targetFile = Resources.Load<TextAsset>(filePath);
+
+        return targetFile.text;
     }
 }
