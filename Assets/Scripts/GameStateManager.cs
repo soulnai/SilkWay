@@ -7,6 +7,8 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Text;
 
 public class GameStateManager : MonoBehaviour {
 
@@ -34,6 +36,7 @@ public class GameStateManager : MonoBehaviour {
 
     private void SetCompanions()
     {
+        /*
         Companion trader = new Companion();
         trader.CompanionName = "trader";
         trader.eventReactions.Add(EnumSpace.EventType.Trade, 0.7f);
@@ -74,10 +77,21 @@ public class GameStateManager : MonoBehaviour {
         player.GetComponent<Player>().companions.Add(dog);
         player.GetComponent<Player>().companions.Add(ranger);
         
+
+
+        string js = Serialization.Serialize(typeof(Player), player.GetComponent<Player>());
+
+        Debug.Log(js);
+        SaveLoad.Save(js, "Resources/Player/Player.json");
+        */
+        Player tmp = Serialization.Deserialize(typeof(Player), SaveLoad.Load("Resources/Player/Player.json")) as Player;
+
+        player.GetComponent<Player>().companions = tmp.companions;
     }
 
     private void EventsGenerate()
     {
+        /*
         RandomEvent Nothing = new RandomEvent();
 
         Nothing.type = EnumSpace.EventType.Nothing;
@@ -117,6 +131,16 @@ public class GameStateManager : MonoBehaviour {
         Fight.StartMessageWindowText = "Some local bandits came out of the corner. Prepare to fight.";
 
         AllEvents.Add(Fight);
+
+        string js = Serialization.Serialize(typeof(List<RandomEvent>), AllEvents);
+
+        Debug.Log(js);
+        SaveLoad.Save(js, "Resources/Events/Events.json");
+*/
+        string loadjs = SaveLoad.Load("Resources/Events/Events.json");
+        Debug.Log(loadjs);
+        AllEvents = Serialization.Deserialize(typeof(List<RandomEvent>), loadjs) as List<RandomEvent>;
+
     }
 
     // Update is called once per frame
