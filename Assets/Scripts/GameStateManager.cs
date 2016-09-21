@@ -236,6 +236,7 @@ public class GameStateManager : MonoBehaviour {
         player.GetComponent<Player>().Resource = player.GetComponent<Player>().Resource - targetPOI.GetComponent<POI>().PathCost;
         CheckVictory();
         RevealNeighbours(player.GetComponent<Player>().CurrentPOI);
+        targetPOI.gameObject.GetComponent<Renderer>().material.color = Color.yellow;
         LaunchEvent(targetPOI);
     }
 
@@ -396,19 +397,29 @@ public class GameStateManager : MonoBehaviour {
 
     private void GenerateButtons(POI poi)
     {
-        
+
+
         foreach (var item in player.GetComponent<Player>().companions)
             {
-                GameObject Button = Instantiate(Resources.Load("prefab/Button"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-                Companion tmpitem = item;
-                GameObject tmpButton = Button;
-                tmpButton.transform.SetParent(EventWindow.transform, false);
-                tmpButton.GetComponent<Button>().onClick.AddListener(() => ProcessChoiseResult(poi.Events[0], tmpitem));
-                tmpButton.GetComponentInChildren<Text>().text = tmpitem.CompanionName + " (Chance = " + (0.2f + tmpitem.eventReactions[poi.Events[0].type]) * 100 + "%)";
-                tmpButtons.Add(tmpButton);
-                tmpButton.SetActive(true);
+            List<EnumSpace.EventType> companion_types = new List<EnumSpace.EventType>();
+            foreach (EnumSpace.EventType reaction in item.eventReactions.Keys)
+            {
+                companion_types.Add(reaction);
             }
-//        }
+
+            Debug.Log(poi.Events[0].type);
+                if (companion_types.Contains(poi.Events[0].type))
+                {
+                    GameObject Button = Instantiate(Resources.Load("prefab/Button"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+                    Companion tmpitem = item;
+                    GameObject tmpButton = Button;
+                    tmpButton.transform.SetParent(EventWindow.transform, false);
+                    tmpButton.GetComponent<Button>().onClick.AddListener(() => ProcessChoiseResult(poi.Events[0], tmpitem));
+                    tmpButton.GetComponentInChildren<Text>().text = tmpitem.CompanionName + " (Chance = " + (0.2f + tmpitem.eventReactions[poi.Events[0].type]) * 100 + "%)";
+                    tmpButtons.Add(tmpButton);
+                    tmpButton.SetActive(true);
+                }
+            }
     }
 
     private bool CompanionCheck(EnumSpace.EventType ev)

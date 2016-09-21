@@ -6,7 +6,6 @@
 		"CompanionName": "trader",
 		"eventReactions": {
 			"Trade": 0.7,
-			"Fight": 0.1,
 			"Nothing": 0.1
 		},
 		"eventStringsSuccess": {
@@ -22,13 +21,11 @@
 	}, {
 		"CompanionName": "dog",
 		"eventReactions": {
-			"Trade": 0.05,
 			"Fight": 0.7,
 			"Nothing": 0.1
 		},
 		"eventStringsSuccess": {
 			"Nothing": "Dog accidentaly finds something usable.",
-			"Trade": "Dog just charm a trader and you get a profit from a deal.",
 			"Fight": "Dog wins!"
 		},
 		"eventStringsLoss": {
@@ -39,19 +36,34 @@
 	}, {
 		"CompanionName": "ranger",
 		"eventReactions": {
-			"Trade": 0.1,
 			"Fight": 0.4,
 			"Nothing": 0.7
 		},
 		"eventStringsSuccess": {
 			"Nothing": "Ranger accidentaly finds something usable.",
-			"Trade": "Ranger told some coll stories to a trader. It makes profit!",
 			"Fight": "Ranger wins!"
 		},
 		"eventStringsLoss": {
 			"Nothing": "It's just a caravain remains.",
 			"Trade": "No trade. At all, only losts.",
 			"Fight": "Ranger lost a fight."
+		}
+	}, {
+		"CompanionName": "Default",
+		"eventReactions": {
+			"Trade": 0.15,
+			"Fight": 0.15,
+			"Nothing": 0.15
+		},
+		"eventStringsSuccess": {
+			"Nothing": "You accidentaly finds something usable.",
+			"Trade": "You told some coll stories to a trader. It makes profit!",
+			"Fight": "You wins!"
+		},
+		"eventStringsLoss": {
+			"Nothing": "It's just a caravain remains.",
+			"Trade": "No trade. At all, only losts.",
+			"Fight": "You lost a fight."
 		}
 	}]
 }

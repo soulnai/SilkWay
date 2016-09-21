@@ -41,16 +41,14 @@ public class MapGenerator : MonoBehaviour {
 
         int id = 1;
         float x = 0f;
-
+        float z = 0f;
         for (int i = 0; i < rowCount; i++)
         {
             List<GameObject> smallList = new List<GameObject>();
-            float z = -2.5f;
+
             for (int j = 0; j < POIcount; j++)
             {
-                float randX = Random.Range(1f, 2f);
-
-                GameObject poi = PlacePoi(x, 0, randX, startPOI);
+                GameObject poi = Instantiate(Resources.Load("prefab/Cube"), new Vector3(x+Random.Range(-2f, 2f), 0, z+Random.Range(-2f, 5f)), Quaternion.identity) as GameObject; //PlacePoi(x, 0, startPOI, 0);
 
                 poi.GetComponent<POI>().ID = id;
                 GenerateEvents(poi.GetComponent<POI>());
@@ -59,10 +57,9 @@ public class MapGenerator : MonoBehaviour {
                 smallList.Add(poi);
                 if (i != 0)
                     poi.gameObject.SetActive(false);
-                z += 1.5f;
             }
             All.Add(smallList);
-            x += 1f;
+            x += 2.5f;
         }
 
         float largestX = AllPoi.Last().gameObject.transform.position.x;
@@ -113,16 +110,55 @@ public class MapGenerator : MonoBehaviour {
         RandomPois.Add(AllPoi[Random.Range(0, AllPoi.Count)]);
         RandomPois.Add(AllPoi[Random.Range(0, AllPoi.Count)]);
 
-        foreach (GameObject point in AllPoi)
+        foreach (List<GameObject> Listpoint in All)
         {
-            for (int counts = 0; counts < 2; counts++)
+            for (int i = 0; i <= Listpoint.Count-3; i++) //foreach (GameObject point in Listpoint)
             {
-                int remove = Random.Range(0, 2);
-                if (remove == 1 && point.GetComponent<POI>().ConnectedNodes.Count >= 3 && point != startPOI && point != endPOI && !startPOI.GetComponent<POI>().ConnectedNodes.Contains(point.GetComponent<POI>()))
+                GameObject point = Listpoint[i];
+                int conn = point.GetComponent<POI>().ConnectedNodes.Count;
+                if (conn > 4 && point != startPOI && point != endPOI)
                 {
-                    POI randomnode = point.GetComponent<POI>().ConnectedNodes[Random.Range(0, point.GetComponent<POI>().ConnectedNodes.Count)];
-                    point.GetComponent<POI>().ConnectedNodes.Remove(randomnode);
-                    randomnode.GetComponent<POI>().ConnectedNodes.Remove(point.GetComponent<POI>());
+                    Debug.Log(point.GetComponent<POI>().ConnectedNodes.Count);
+                    int remove = Random.Range(0, point.GetComponent<POI>().ConnectedNodes.Count - 1);
+                    POI randomnode = point.GetComponent<POI>().ConnectedNodes[remove];
+                    if (randomnode != endPOI && point != endPOI)
+                    {
+                        point.GetComponent<POI>().ConnectedNodes.Remove(randomnode);
+                    }
+
+                    Debug.Log(point.GetComponent<POI>().ConnectedNodes.Count);
+                    remove = Random.Range(0, point.GetComponent<POI>().ConnectedNodes.Count - 1);
+                    randomnode = point.GetComponent<POI>().ConnectedNodes[remove];
+                    if (randomnode != endPOI && point != endPOI)
+                    {
+                        point.GetComponent<POI>().ConnectedNodes.Remove(randomnode);
+                    }
+
+                    Debug.Log(point.GetComponent<POI>().ConnectedNodes.Count);
+                    remove = Random.Range(0, point.GetComponent<POI>().ConnectedNodes.Count - 1);
+                    randomnode = point.GetComponent<POI>().ConnectedNodes[remove];
+                    if (randomnode != endPOI && point != endPOI)
+                    {
+                        point.GetComponent<POI>().ConnectedNodes.Remove(randomnode);
+                    }
+                } else
+                if (conn > 3 && point != startPOI && point != endPOI)
+                {
+                    Debug.Log(point.GetComponent<POI>().ConnectedNodes.Count);
+                    int remove = Random.Range(0, point.GetComponent<POI>().ConnectedNodes.Count - 1);
+                    POI randomnode = point.GetComponent<POI>().ConnectedNodes[remove];
+                    if (randomnode != endPOI && point != endPOI)
+                    {
+                        point.GetComponent<POI>().ConnectedNodes.Remove(randomnode);
+                    }
+
+                    Debug.Log(point.GetComponent<POI>().ConnectedNodes.Count);
+                    remove = Random.Range(0, point.GetComponent<POI>().ConnectedNodes.Count - 1);
+                    randomnode = point.GetComponent<POI>().ConnectedNodes[remove];
+                    if (randomnode != endPOI && point != endPOI)
+                    {
+                        point.GetComponent<POI>().ConnectedNodes.Remove(randomnode);
+                    }
                 }
             }
         }
@@ -135,7 +171,8 @@ public class MapGenerator : MonoBehaviour {
 
 
         foreach (POI connectedPoi in startPOI.GetComponent<POI>().ConnectedNodes)
-            DrawConnections(startPOI.GetComponent<POI>(), connectedPoi);
+            if (connectedPoi.ConnectedNodes.Count > 0)
+                DrawConnections(startPOI.GetComponent<POI>(), connectedPoi);
         
 
         GameObject player = Instantiate(Resources.Load("prefab/Capsule"), basePoint + new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
@@ -177,16 +214,17 @@ public class MapGenerator : MonoBehaviour {
         }*/
     }
 
-    private static GameObject PlacePoi(float x, float z, float randX, GameObject start)
+    private static GameObject PlacePoi(float x, float z, float randX, GameObject start, int counter)
     {
+        counter += 1;
         Vector3 location = new Vector3(x+Random.Range(0f, 3f), 0, z+Random.Range(-1f, 3f));
         Collider[] hitColliders = Physics.OverlapSphere(location, 2f);
         Debug.Log(hitColliders.Length);
         //return Instantiate(Resources.Load("prefab/Cube"), location, Quaternion.identity) as GameObject;
-        if (hitColliders.Length == 0)
+        if (hitColliders.Length == 0 || counter > 10)
             return Instantiate(Resources.Load("prefab/Cube"), location, Quaternion.identity) as GameObject;
         else
-            return PlacePoi(x, z, randX, start);
+            return PlacePoi(x, z, randX, start, counter);
     }
 
     public void ConnectPOIs(POI start, POI end)

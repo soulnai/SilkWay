@@ -3,6 +3,7 @@
 
 [Ll]ibrary/
 [Tt]emp/
+[Bb]uild/
 
 # User-specific files
 *.suo
@@ -303,3 +304,4 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+build.zip
