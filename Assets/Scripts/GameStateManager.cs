@@ -15,17 +15,20 @@ public class GameStateManager : MonoBehaviour {
     public GameObject player;
     public MapGenerator MG;
     public GameObject EventWindow;
+    public GameObject ResourcesWindowObj;
     public List<RandomEvent> AllEvents = new List<RandomEvent>();
 
     public GameStates gamestate;
 
-    public List<GameObject> tmpButtons;
+    public List<GameObject> tmpButtons = new List<GameObject>();
+    public List<GameObject> YesNoButtons = new List<GameObject>();
     public AudioSource play;
     AudioClip EventSound;
     // Use this for initialization
     void Start () {
         MG = GameObject.Find("MapController").GetComponent<MapGenerator>();
         EventWindow = GameObject.Find("EventWindow");
+        ResourcesWindowObj = GameObject.Find("ResourcesWindow");
         EventWindow.SetActive(false);
         gamestate = GameStates.GlobalMap;
         EventsGenerate();
@@ -98,7 +101,8 @@ public class GameStateManager : MonoBehaviour {
         Nothing.StartMessageWindowHeader = "Unepected findings Start";
         Nothing.EndMessageWindowHeader = "Unepected findings End";
         Nothing.StartMessageWindowText = "One of your companions find something. You should take a look.";
-
+        Nothing.LaunchNextEvent = true;
+        Nothing.NextEvent = EnumSpace.EventType.Fight;
         AllEvents.Add(Nothing);
 
         RandomEvent Luck = new RandomEvent();
@@ -135,8 +139,8 @@ public class GameStateManager : MonoBehaviour {
         string js = Serialization.Serialize(typeof(List<RandomEvent>), AllEvents);
 
         Debug.Log(js);
-        SaveLoad.Save(js, "Resources/Events/Events.json");
-*/
+        SaveLoad.Save(js, "Resources/Events/Events.json");*/
+        
         string loadjs = SaveLoad.Load("Events/Events.json");
         Debug.Log(loadjs);
         AllEvents = Serialization.Deserialize(typeof(List<RandomEvent>), loadjs) as List<RandomEvent>;
@@ -152,30 +156,20 @@ public class GameStateManager : MonoBehaviour {
     {
         player = playertoset;
         SetCompanions();
+        UpdateResources();
     }
 
-    public void LaunchEvent(POI poi)
+    private void UpdateResources()
     {
-        if (player.GetComponent<Player>().CurrentPOI != MG.endPOI)
-        {
+        ResourcesWindowObj.GetComponent<ResourcesWindow>().ResourcesAmount.GetComponent<TextMeshProUGUI>().SetText(player.GetComponent<Player>().Resource.ToString());
+    }
 
-            if (poi.RandomEvent != false && poi.Events.Count > 0)
-            {
+    public void LaunchEvent(RandomEvent ev)
+    {
                 gamestate = GameStates.EventWindow;
-                ProcessEvent(poi);
+                ProcessEvent(ev);
                 PlaySound(EventSound);
                 EventWindow.SetActive(true);
-            }
-            else
-            {
-                gamestate = GameStates.GlobalMap;
-            }
-        }
-        else
-        {
-            gamestate = GameStates.GlobalMap;
-        }
-        Debug.Log(gamestate);
     }
 
     public void PlaySound(AudioClip sound) 
@@ -237,7 +231,16 @@ public class GameStateManager : MonoBehaviour {
         CheckVictory();
         RevealNeighbours(player.GetComponent<Player>().CurrentPOI);
         targetPOI.gameObject.GetComponent<Renderer>().material.color = Color.yellow;
-        LaunchEvent(targetPOI);
+        if (targetPOI.RandomEvent != false && targetPOI.Events.Count > 0 && player.GetComponent<Player>().CurrentPOI != MG.endPOI)
+        {
+            targetPOI.RandomEvent = false;
+            LaunchEvent(targetPOI.Events[0]);
+        }
+        else
+        {
+            gamestate = GameStates.GlobalMap;
+            UpdateResources();
+        }
     }
 
     public void RevealNeighbours(GameObject poi)
@@ -248,31 +251,30 @@ public class GameStateManager : MonoBehaviour {
         {
             MG.DrawConnections(poi.GetComponent<POI>(), point);
             point.gameObject.SetActive(true);
-            point.gameObject.transform.DOShakeScale(0.5f, 0.5f, 3, 50);
+            point.gameObject.transform.DOShakeScale(0.5f, 0.5f, 3, 30);
         }
     }
 
-    public void ProcessEvent(POI poi)
+    public void ProcessEvent(RandomEvent eve)
     {
-        EnumSpace.EventType ev = poi.Events[0].type;
-        poi.RandomEvent = false;
+        EnumSpace.EventType ev = eve.type;
+
         switch (ev)
         {
             case EnumSpace.EventType.Nothing:
                 {
                     Debug.Log("Random event - Nothing");
-                    poi.RandomEvent = false;
 
-                    GenerateButtons(poi);
+                    GenerateButtons(eve);
 
                     if (CompanionCheck(ev))
                     {
-                        EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = poi.Events[0].StartMessageWindowHeader;
-                        EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = poi.Events[0].StartMessageWindowText;
+                        EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = eve.StartMessageWindowHeader;
+                        EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = eve.StartMessageWindowText;
                     }
                     else
                     {
-                        EventWindow.GetComponent<MessageWindowController>().Button.SetActive(true);
+                        GenerateCloseButton(eve);
                         EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = "Nothing here";
                         EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = "Nothing can be found here. Just rocky desert. You still have " + player.GetComponent<Player>().Resource + " resources.";
                     }
@@ -283,12 +285,12 @@ public class GameStateManager : MonoBehaviour {
                 {
 
 
-                    GenerateButtons(poi);
+                    GenerateButtons(eve);
 
                     if (CompanionCheck(ev))
                     {
-                        EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = poi.Events[0].StartMessageWindowHeader;
-                        EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = poi.Events[0].StartMessageWindowText;
+                        EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = eve.StartMessageWindowHeader;
+                        EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = eve.StartMessageWindowText;
                     }
                     else
                     {
@@ -302,8 +304,7 @@ public class GameStateManager : MonoBehaviour {
                             Debug.Log("You lost " + loss + " resources");
                             player.GetComponent<Player>().Resource = player.GetComponent<Player>().Resource - loss;
                             Debug.Log("Total resources =  " + player.GetComponent<Player>().Resource);
-                            poi.RandomEvent = false;
-                            EventWindow.GetComponent<MessageWindowController>().Button.SetActive(true);
+                            GenerateCloseButton(eve);
                             EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = "Unfortunate trade";
                             EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = "You lost " + loss + " resources. And now you have " + player.GetComponent<Player>().Resource + " resources.";
                         }
@@ -314,8 +315,7 @@ public class GameStateManager : MonoBehaviour {
                             Debug.Log("You gain " + gain + " resources");
                             player.GetComponent<Player>().Resource = player.GetComponent<Player>().Resource + gain;
                             Debug.Log("Total resources =  " + player.GetComponent<Player>().Resource);
-                            poi.RandomEvent = false;
-                            EventWindow.GetComponent<MessageWindowController>().Button.SetActive(true);
+                            GenerateCloseButton(eve);
                             EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = "Great trade";
                             EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = "You gain " + gain + " resources. And now you have " + player.GetComponent<Player>().Resource + " resources.";
                         }
@@ -324,15 +324,14 @@ public class GameStateManager : MonoBehaviour {
                 }
             case EnumSpace.EventType.Fight:
                 {
-                    poi.RandomEvent = false;
 
-                    GenerateButtons(poi);
+                    GenerateButtons(eve);
 
 
                     if (CompanionCheck(ev))
                     {
-                        EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = poi.Events[0].StartMessageWindowHeader;
-                        EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = poi.Events[0].StartMessageWindowText;
+                        EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = eve.StartMessageWindowHeader;
+                        EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = eve.StartMessageWindowText;
                     }
                     else
                     {
@@ -346,8 +345,7 @@ public class GameStateManager : MonoBehaviour {
                             Debug.Log("You lost " + loss + " resources");
                             player.GetComponent<Player>().Resource = player.GetComponent<Player>().Resource - loss;
                             Debug.Log("Total resources =  " + player.GetComponent<Player>().Resource);
-                            poi.RandomEvent = false;
-                            EventWindow.GetComponent<MessageWindowController>().Button.SetActive(true);
+                            GenerateCloseButton(eve);
                             EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = "Unfortunate Fight";
                             EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = "You was beaten and robbered. Lost " + loss + " resources. And now you have " + player.GetComponent<Player>().Resource + " resources.";
                         }
@@ -358,8 +356,7 @@ public class GameStateManager : MonoBehaviour {
                             Debug.Log("You gain " + gain + " resources");
                             player.GetComponent<Player>().Resource = player.GetComponent<Player>().Resource + gain;
                             Debug.Log("Total resources =  " + player.GetComponent<Player>().Resource);
-                            poi.RandomEvent = false;
-                            EventWindow.GetComponent<MessageWindowController>().Button.SetActive(true);
+                            GenerateCloseButton(eve);
                             EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = "Great Fight";
                             EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = "You win! Bandits flee and left some resources. Gained " + gain + " resources. And now you have " + player.GetComponent<Player>().Resource + " resources.";
                         }
@@ -373,10 +370,10 @@ public class GameStateManager : MonoBehaviour {
                     Debug.Log("You gain " + gain + " resources");
                     player.GetComponent<Player>().Resource = player.GetComponent<Player>().Resource + gain;
                     Debug.Log("Total resources =  " + player.GetComponent<Player>().Resource);
-                    poi.RandomEvent = false;
-                    EventWindow.GetComponent<MessageWindowController>().Button.SetActive(true);
+                    GenerateCloseButton(eve);
                     EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = "Luck!";
                     EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = "Even this deserts can provide something useful. Gained " + gain + " resources. And now you have " + player.GetComponent<Player>().Resource + " resources.";
+                    UpdateResources();
                     break;
                 }
             case EnumSpace.EventType.Misfortune:
@@ -386,19 +383,33 @@ public class GameStateManager : MonoBehaviour {
                     Debug.Log("You lost " + lost + " resources");
                     player.GetComponent<Player>().Resource = player.GetComponent<Player>().Resource - lost;
                     Debug.Log("Total resources =  " + player.GetComponent<Player>().Resource);
-                    poi.RandomEvent = false;
-                    EventWindow.GetComponent<MessageWindowController>().Button.SetActive(true);
+                    GenerateCloseButton(eve);
                     EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = "Misfortune!";
                     EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = "This unwelcome land hides a lot of dangers. You lost " + lost + " resources. And now you have " + player.GetComponent<Player>().Resource + " resources.";
+                    UpdateResources();
+                    break;
+                }
+            case EnumSpace.EventType.Choice:
+                {
+                    Debug.Log("Random event - Choise");
+                    GenerateCloseButton(eve);
+                    GameObject Button = Instantiate(Resources.Load("prefab/Button"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+                    GameObject tmpButton = Button;
+                    tmpButton.transform.SetParent(EventWindow.transform, false);
+                    YesNoButtons.Add(tmpButton);
+                    tmpButton.GetComponent<Button>().onClick.AddListener(() => BrakeChain());
+                    tmpButton.GetComponentInChildren<Text>().text = "No.";
+
+                    tmpButton.SetActive(true);
+                    EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = eve.StartMessageWindowHeader;
+                    EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = eve.StartMessageWindowText;
                     break;
                 }
         }
     }
 
-    private void GenerateButtons(POI poi)
+    private void GenerateButtons(RandomEvent eve)
     {
-
-
         foreach (var item in player.GetComponent<Player>().companions)
             {
             List<EnumSpace.EventType> companion_types = new List<EnumSpace.EventType>();
@@ -407,15 +418,15 @@ public class GameStateManager : MonoBehaviour {
                 companion_types.Add(reaction);
             }
 
-            Debug.Log(poi.Events[0].type);
-                if (companion_types.Contains(poi.Events[0].type))
+            Debug.Log(eve.type);
+                if (companion_types.Contains(eve.type))
                 {
                     GameObject Button = Instantiate(Resources.Load("prefab/Button"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
                     Companion tmpitem = item;
                     GameObject tmpButton = Button;
                     tmpButton.transform.SetParent(EventWindow.transform, false);
-                    tmpButton.GetComponent<Button>().onClick.AddListener(() => ProcessChoiseResult(poi.Events[0], tmpitem));
-                    tmpButton.GetComponentInChildren<Text>().text = tmpitem.CompanionName + " (Chance = " + (0.2f + tmpitem.eventReactions[poi.Events[0].type]) * 100 + "%)";
+                    tmpButton.GetComponent<Button>().onClick.AddListener(() => ProcessChoiseResult(eve, tmpitem));
+                    tmpButton.GetComponentInChildren<Text>().text = tmpitem.CompanionName + " (Chance = " + (0.2f + tmpitem.eventReactions[eve.type]) * 100 + "%)";
                     tmpButtons.Add(tmpButton);
                     tmpButton.SetActive(true);
                 }
@@ -462,7 +473,6 @@ public class GameStateManager : MonoBehaviour {
             Debug.Log(companion.CompanionName);
             int gain = UnityEngine.Random.Range(1, 3);
             player.GetComponent<Player>().Resource = player.GetComponent<Player>().Resource + gain;
-            EventWindow.GetComponent<MessageWindowController>().Button.SetActive(true);
             foreach (GameObject b in tmpButtons)
             {
                 b.SetActive(false);
@@ -476,7 +486,6 @@ public class GameStateManager : MonoBehaviour {
         {
             Debug.Log(rnd);
             Debug.Log(companion.CompanionName);
-            EventWindow.GetComponent<MessageWindowController>().Button.SetActive(true);
             foreach (GameObject b in tmpButtons)
             {
                 b.SetActive(false);
@@ -486,13 +495,65 @@ public class GameStateManager : MonoBehaviour {
             EventWindow.GetComponent<MessageWindowController>().EventName.GetComponent<TextMeshProUGUI>().text = Event.EndMessageWindowHeader;
             EventWindow.GetComponent<MessageWindowController>().EventDescription.GetComponent<TextMeshProUGUI>().text = companion.eventStringsLoss[Event.type] + " And now you have " + player.GetComponent<Player>().Resource + " resources.";
         }
-        EventWindow.SetActive(true);
+        GenerateCloseButton(Event);
+        //EventWindow.SetActive(true);
         foreach (GameObject b in tmpButtons)
         {
             b.SetActive(false);
             Destroy(b);
         }
+        UpdateResources();
         tmpButtons.Clear();
     }
 
+    private void GenerateCloseButton(RandomEvent Event)
+    {
+        GameObject Button = Instantiate(Resources.Load("prefab/Button"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        GameObject tmpButton = Button;
+        tmpButton.transform.SetParent(EventWindow.transform, false);
+        tmpButton.GetComponent<Button>().onClick.AddListener(() => CloseWindow(Event, tmpButton));
+        tmpButton.SetActive(true);
+        YesNoButtons.Add(tmpButton);
+    }
+
+    public void CloseWindow(RandomEvent Event, GameObject Button)
+    {
+        YesNoButtons.Add(Button);
+        gameObject.SetActive(false);
+        gamestate = GameStates.GlobalMap;
+        EventWindow.SetActive(false);
+        foreach (GameObject Btn in YesNoButtons)
+        {
+            Btn.SetActive(false);
+            Destroy(Button);
+        }
+        YesNoButtons.Clear();
+        if (Event.LaunchNextEvent == true)
+        {
+            foreach (RandomEvent ev in AllEvents)
+            {
+                if (ev.type == Event.NextEvent)
+                {
+                    Event.LaunchNextEvent = false;
+                    LaunchEvent(ev);
+                    break;
+                }
+            }
+        }
+        UpdateResources();
+    }
+
+    public void BrakeChain()
+    {
+        foreach (GameObject Button in YesNoButtons)
+        {
+            Button.SetActive(false);
+            Destroy(Button);
+        }
+        YesNoButtons.Clear();
+        gameObject.SetActive(false);
+        gamestate = GameStates.GlobalMap;
+        EventWindow.SetActive(false);
+        UpdateResources();
+    }
 }

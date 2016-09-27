@@ -29,6 +29,7 @@ public class POI : MonoBehaviour {
 
     public List<RandomEvent> Events = new List<RandomEvent>();
 
+    public Vector2 location;
     // Use this for initialization
     void Start () {
         OnPOIClicked += MoveUnitToPOI;

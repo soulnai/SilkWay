@@ -16,6 +16,9 @@ public class RandomEvent {
 
     public Dictionary<string, float> companions = new Dictionary<string, float>();
 
+    public bool LaunchNextEvent = false;
+
+    public EnumSpace.EventType NextEvent;
 
     // Use this for initialization
     void Start () {

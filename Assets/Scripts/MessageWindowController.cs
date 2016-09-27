@@ -30,11 +30,23 @@ public class MessageWindowController : MonoBehaviour
     {
 
     }
-
+    /*
     public void CloseWindow()
     {
         Button.SetActive(false);
         gameObject.SetActive(false);
         GM.gamestate = GameStates.GlobalMap;
-    }
+        if (Event.LaunchNextEvent)
+        {
+            foreach (RandomEvent ev in AllEvents)
+            {
+                if (ev.type == Event.NextEvent)
+                {
+                    LaunchEvent(ev);
+                    break;
+                }
+            }
+
+        }
+    }*/
 }

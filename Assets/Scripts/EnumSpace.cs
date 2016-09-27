@@ -18,6 +18,7 @@ namespace EnumSpace
         Trade = 1,
         Fight = 2,
         Luck = 3,
-        Misfortune = 4
+        Misfortune = 4,
+        Choice = 5
     }
 }

@@ -1,11 +1,13 @@
 ﻿[{
 	"type": "Nothing",
 	"StartMessageWindowHeader": "Unexpected findings Start",
-	"StartMessageWindowText": "Looks like here may be something useful. You should take a look.",
+	"StartMessageWindowText": "One of your companions find something. You should take a look.",
 	"EndMessageWindowHeader": "Unexpected findings End",
 	"EndMessageWindowTextSuccess": null,
 	"EndMessageWindowTextFailure": null,
-	"companions": {}
+	"companions": {},
+	"LaunchNextEvent": true,
+	"NextEvent": "Fight"
 }, {
 	"type": "Luck",
 	"StartMessageWindowHeader": null,
@@ -13,7 +15,9 @@
 	"EndMessageWindowHeader": null,
 	"EndMessageWindowTextSuccess": null,
 	"EndMessageWindowTextFailure": null,
-	"companions": {}
+	"companions": {},
+	"LaunchNextEvent": false,
+	"NextEvent": "Nothing"
 }, {
 	"type": "Misfortune",
 	"StartMessageWindowHeader": null,
@@ -21,7 +25,9 @@
 	"EndMessageWindowHeader": null,
 	"EndMessageWindowTextSuccess": null,
 	"EndMessageWindowTextFailure": null,
-	"companions": {}
+	"companions": {},
+	"LaunchNextEvent": false,
+	"NextEvent": "Nothing"
 }, {
 	"type": "Trade",
 	"StartMessageWindowHeader": "Random event - Trade Start",
@@ -29,7 +35,9 @@
 	"EndMessageWindowHeader": "Random event - Trade End",
 	"EndMessageWindowTextSuccess": null,
 	"EndMessageWindowTextFailure": null,
-	"companions": {}
+	"companions": {},
+	"LaunchNextEvent": false,
+	"NextEvent": "Nothing"
 }, {
 	"type": "Fight",
 	"StartMessageWindowHeader": "Random event - Fight Start",
@@ -37,5 +45,17 @@
 	"EndMessageWindowHeader": "Random event - Fight End",
 	"EndMessageWindowTextSuccess": null,
 	"EndMessageWindowTextFailure": null,
-	"companions": {}
+	"companions": {},
+	"LaunchNextEvent": false,
+	"NextEvent": "Nothing"
+}, {
+	"type": "Choice",
+	"StartMessageWindowHeader": "Random event - Choice Start",
+	"StartMessageWindowText": "You found ancient tomb. It looks like abandoned. Do you want to search it?",
+	"EndMessageWindowHeader": "Random event - Choice End",
+	"EndMessageWindowTextSuccess": null,
+	"EndMessageWindowTextFailure": null,
+	"companions": {},
+	"LaunchNextEvent": true,
+	"NextEvent": "Fight"
 }]

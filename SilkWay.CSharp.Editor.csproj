@@ -100,6 +100,9 @@
     <Reference Include="Pathfinding.Poly2Tri">
       <HintPath>Assets\AstarPathfindingProject\Plugins\Poly2Tri\Pathfinding.Poly2Tri.dll</HintPath>
     </Reference>
+    <Reference Include="AS3DelaunayExtended">
+      <HintPath>Assets\delaunay\AS3DelaunayExtended.dll</HintPath>
+    </Reference>
     <Reference Include="DOTween">
       <HintPath>Assets\DOTween\DOTween.dll</HintPath>
     </Reference>
